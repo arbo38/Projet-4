@@ -1,26 +1,15 @@
-<?php
-	 if($message == 'success'){
-	 	$message = "
-				<div class='alert alert-success temp'>
-					Le commentaire a bien été supprimé.
-				</div> <!-- div.alert alert-success -->";
-	 } elseif ($message == 'success-cascade') {
-	 	$message = "
-				<div class='alert alert-success temp'>
-					Le commentaire a bien été supprimé ainsi que ses réponses.
-				</div> <!-- div.alert alert-success -->";
-	 } elseif ($message == 'error') {
-	 	$message = "
-				<div class='alert alert-danger temp'>
-					Une erreur est survenue.
-				</div> <!-- div.alert alert-success -->";
-	 } else {
-	 	$message = "";
-	 }
 
-?>
-<?= $message ?>
 
-<h1>Page de suppression des articles</h1>
+<div class="row">
+	<div class="col-sm-6">
+		<h1>Suppression des commentaires</h1>
+	</div> <!-- div.col-sm-6 -->
+	
+	<div class="col-sm-6">
+		<a class='btn btn-primary' href="?page=admin.article.index">
+			Retour au panneau d'administration
+		</a>
+	</div> <!-- div.col-sm-6 -->
+</div> <!-- div.row -->
 
 <a class='btn btn-primary' href="?page=admin.article.index">Retour au panneau d'administration</a>

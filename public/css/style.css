@@ -1,32 +1,38 @@
-html,
-body,
-header,
-.view {
-  height: 100%;
+/* YOUR CUSTOM STYLES */
+.list-group-item.active {
+    background-color: #33b5e5;
+    border-color:#33b5e5
 }
 
-/* Navigation*/
+.list-group-item:not(.active) {
+    color:#222;
+}
+
+.list-group-item:not(.active):hover {
+    color:#666;
+}
+
+/* TEMPLATE STYLES */
+
+main {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+    min-height: 700px;
+}
+
+.widget-wrapper {
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 2rem;
+}
+
+
 .navbar {
-  background-color: #4285F4;
+    background-color: #53463d;
 }
 
-nav a{
-	color: white !important;
-}
+footer.page-footer {
+    background-color: #53463d;
+    margin-top: 2rem;
 
-.navbar-brand{
-	color: white !important;
-}
-
-/*Intro*/
-.view {
-  background: url("https://mdbootstrap.com/img/Photos/Horizontal/Nature/12-col/img%20(54).jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-.tinyMCE {
-  min-height: 500px;
 }

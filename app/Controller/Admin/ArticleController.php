@@ -16,10 +16,7 @@ class ArticleController extends AppController{
 			if(isset($_POST['deleteArticle'])){
 				if($this->articleModel->get($_POST['deleteArticle'])){
 					if($this->articleModel->delete($_POST['deleteArticle'])){
-						$message = "
-						<div class='alert alert-success'>
-							L'article a bien été supprimé
-						</div> <!-- div.alert alert-success -->";
+						$message = ['type' => 'success', 'message' => 'L\'article a bien été supprimé'];
 						
 					}
 				}
@@ -27,19 +24,17 @@ class ArticleController extends AppController{
 			if(isset($_POST['deleteCategorie'])){
 				if($this->categorieModel->get($_POST['deleteCategorie'])){
 					if($this->categorieModel->delete($_POST['deleteCategorie'])){
-						$message = "
-						<div class='alert alert-success'>
-							La catégorie a bien été supprimé
-						</div> <!-- div.alert alert-success -->";
+						$message = ['type' => 'success', 'message' => 'La catégorie a bien été supprimé'];
 					}
 				}
 			}
 		}
 		$articles = $this->articleModel->getAll();
+		$lastArticles = $this->articleModel->getLast(5);
 		$categories = $this->categorieModel->getAll();
-		$lastComments = $this->commentModel->findLast(5);
+		$lastComments = $this->commentModel->findLast(10);
 		$commentsByArticle = $this->commentModel->findAllByArticle($articles);
-		$this->render('admin.index', compact('articles', 'categories', 'message', 'lastComments', 'commentsByArticle'));
+		$this->render('admin.index', compact('articles', 'categories', 'message', 'lastComments', 'commentsByArticle', 'lastArticles'));
 	}
 
 	public function newArticle(){
@@ -70,10 +65,7 @@ class ArticleController extends AppController{
 			$articleId = (int) $_GET['id'];
 			$update = $this->articleModel->update($articleId, ['titre' => $titre, 'contenu' => $contenu, 'categorie_id' => $categorie_id]);
 			if($update){
-				$message = "
-				<div class='alert alert-success'>
-					L'article a bien été mis à jour.
-				</div> <!-- div.alert alert-success -->";
+				$message = ['type' => 'success', 'message' => 'L\'article a bien été mis à jour.'];
 			}
 		}
 	// On regarde si l'on vient éditer un article avec la présence d'un id
@@ -83,11 +75,8 @@ class ArticleController extends AppController{
 			if(isset($_SESSION['new'])){
 				if($_SESSION['new']){
 					unset($_SESSION['new']);
-					$message = "
-					<div class='alert alert-success'>
-						L'article a bien été créé.
-					</div> <!-- div.alert alert-success -->
-					";	
+					$message = ['type' => 'success', 'message' => 'L\'article a bien été créé.'];
+
 				}
 			}
 		} else {
@@ -96,6 +85,7 @@ class ArticleController extends AppController{
 				Aucun article sélectionné
 			</div> <!-- div.alert alert-success -->
 			";
+			$message = ['type' => 'warning', 'message' => 'Aucun article sélectionné'];
 		}
 		$form = new \Core\HTML\BootstrapForm($article);
 		$this->render('admin.article.edit', compact('form', 'categories', 'message'));

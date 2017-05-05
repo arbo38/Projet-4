@@ -31,11 +31,7 @@ class CategorieController extends AppController{
 			$categorieId = (int) $_GET['id'];
 			$update = $this->categorieModel->update($categorieId, ['categorie' => $categorie]);
 			if($update){
-				$message = "
-				<div class='alert alert-success'>
-					La catégorie a bien été mis à jour.
-				</div> <!-- div.alert alert-success -->
-				";
+				$message = ['type' => 'success', 'message' => 'La catégorie a bien été mis à jour.'];
 				
 			}
 		}
@@ -46,20 +42,11 @@ class CategorieController extends AppController{
 			if(isset($_SESSION['new'])){
 				if($_SESSION['new']){
 					unset($_SESSION['new']);
-					$message = "
-					<div class='alert alert-success'>
-						La catégorie a bien été créé.
-					</div> <!-- div.alert alert-success -->
-					";
+					$message = ['type' => 'success', 'message' => 'La catégorie a bien été créé.'];
 				}
 			}
 		} else {
-			$message = "
-			<div class='alert alert-warning'>
-				Aucune categorie sélectionné
-			</div> <!-- div.alert alert-success -->
-
-			";
+			$message = ['type' => 'warning', 'message' => 'Aucune categorie sélectionné'];
 		}
 		$form = new \Core\HTML\BootstrapForm($categorie);
 		var_dump('troll');

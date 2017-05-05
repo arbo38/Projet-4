@@ -39,14 +39,14 @@ class ArticleTable extends Table {
 		return $articles;
 	}
 
-	public function getLast(){
+	public function getLast(int $number){
 		$articles  = $this->query("
 			SELECT articles.id as id, articles.titre as titre, articles.contenu as contenu, articles.date as date, articles.categorie_id as categorie_id, categories.categorie as categorie
 			FROM articles
 			LEFT JOIN categories ON articles.categorie_id = categories.id
 			ORDER BY articles.id DESC
-			LIMIT 1
-			", null, true, true);
+			LIMIT ".$number."
+			", null, true, false);
 		return $articles;
 	}
 

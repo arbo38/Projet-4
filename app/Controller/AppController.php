@@ -21,4 +21,15 @@ class AppController extends Controller{
 		$model = $this->app->getTable($tableName);
 		$this->$modelName = $model;
 	}
+
+	public function notFound(){
+		header("HTTP/1.0 404 Not Found");
+		$this->render('error.404');
+	}
+
+	public function forbidden(){
+		header("HTTP/1.0 403 Forbidden");
+		header('Location: ?page=forbidden');
+		exit;
+	}
 }

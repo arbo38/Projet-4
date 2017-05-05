@@ -28,9 +28,9 @@ class UserController extends AppController {
 		}
 		if(!empty($_POST)){
 			if($this->auth->login($_POST['username'], $_POST['password'])){
-				return $this->espace_membre();
+				return $this->espace_membre(true);
 			} else {
-				$message = 'error';
+				$message = ['type' => 'danger', 'message' => 'Login ou Password incorrect'];
 				return $this->render('users.login', compact('form', 'message'));
 			}
 		}
@@ -43,14 +43,19 @@ class UserController extends AppController {
 		if($this->auth->logged()){
 			session_destroy();
 			$message = true;
+			$message = ['type' => 'warning', 'message' => 'Vous avez été déconnecté'];
 		} 		
 		$this->render('users.logout', compact('message'));
 	}
 
 	public function espace_membre($params = null){
 		if($this->auth->logged()){
+			$message = '';
 			$user = $this->userModel->get($this->auth->getUserId());
-			return $this->render('users.espace_membre', compact('user'));
+			if($params){
+				$message = ['type' => 'success', 'message' => 'Vous êtes connecté'];
+			}
+			return $this->render('users.espace_membre', compact('user', 'message'));
 		}
 		
 	}

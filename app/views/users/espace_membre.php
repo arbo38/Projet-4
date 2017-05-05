@@ -1,7 +1,3 @@
-
-<?php
-
-?>
 <table class="table">
 	<thead>
 		<tr>

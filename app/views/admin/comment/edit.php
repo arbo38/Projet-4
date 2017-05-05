@@ -1,27 +1,16 @@
-<H1>Edition des commentaires</H1>
 
-<?php
-	 if($message == 'success'){
-	 	$message = "
-				<div class='alert alert-success temp'>
-					Le commentaire a bien été mis à jour.
-				</div> <!-- div.alert alert-success -->";
-	 } elseif ($message == 'error-update') {
-	 	$message = "
-				<div class='alert alert-danger temp'>
-					Une erreur est survenue lors de la mise à jour du commentaire, merci de réessayer.
-				</div> <!-- div.alert alert-success -->";
-	 } elseif ($message == 'error') {
-	 	$message = "
-				<div class='alert alert-danger temp'>
-					Une erreur est survenue.
-				</div> <!-- div.alert alert-success -->";
-	 } else {
-	 	$message = "";
-	 }
 
-?>
-<?= $message ?>
+<div class="row">
+	<div class="col-sm-6">
+		<h1>Edition des commentaires</h1>
+	</div> <!-- div.col-sm-6 -->
+	
+	<div class="col-sm-6">
+		<a class='btn btn-primary' href="?page=admin.article.index">
+			Retour au panneau d'administration
+		</a>
+	</div> <!-- div.col-sm-6  -->
+</div>
 
 <form method="post" action="">
 	<?= $form->input('pseudo', 'Pseudo'); ?>

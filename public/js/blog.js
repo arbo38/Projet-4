@@ -1,5 +1,13 @@
 
 function blogScript(){
+	// Editeur WYSIWYG TinyMCE
+	tinymce.init({
+    	selector: '.tinyMCE',
+    	plugins : 'advlist autolink link image lists charmap print preview',
+    	//toolbar: 'undo redo | styleselect | bold italic | link image'
+  	});
+
+	// Gestion de la confirmation pour la suppression d'articles
 	$('.suppressionArticle').on('click', function(event) {
 		event.preventDefault();
 		var premierBouton = this;
@@ -8,7 +16,7 @@ function blogScript(){
 		var id = $(siblings[0]).html();
 		//var href = "?delete=true&id=" + id;
 		console.log(id);
-		var test = $("<input type='submit' class='btn btn-danger' value='Confirmer' >");
+		var test = $("<input type='submit' class='btn btn-danger btn-sm' value='Confirmer' >");
 		$(this).hide();
 		$(this).after(test);
 		setTimeout(function(){ 
@@ -16,6 +24,8 @@ function blogScript(){
 			$(test).remove();
 		}, 3000);
 	});
+
+	// Gestion de la confirmation pour la suppression de catégories
 	$('.suppressionCategorie').on('click', function(event) {
 		event.preventDefault();
 		var premierBouton = this;
@@ -24,7 +34,7 @@ function blogScript(){
 		var id = $(siblings[0]).html();
 		//var href = "?delete=true&id=" + id;
 		console.log(id);
-		var test = $("<input type='submit' class='btn btn-danger' value='Confirmer' >");
+		var test = $("<input type='submit' class='btn btn-danger btn-sm' value='Confirmer' >");
 		$(this).hide();
 		$(this).after(test);
 		setTimeout(function(){ 
@@ -32,12 +42,8 @@ function blogScript(){
 			$(test).remove();
 		}, 3000);
 	});
-	tinymce.init({
-    	selector: '.tinyMCE',
-    	plugins : 'advlist autolink link image lists charmap print preview',
-    	//toolbar: 'undo redo | styleselect | bold italic | link image'
-  	});
-
+	
+	// Gestion du formulaire de commentaire
   	$('.reply').click(function(e){
         e.preventDefault();
         var $form = $('#form-comment');
@@ -51,11 +57,12 @@ function blogScript(){
     });
 
 
-  	// Affichage des commentaires par articles
+  	// #admin : Affichage des commentaires par articles
   	 
-  	var articleGroups = $(".comments_list");
+  	var articleGroups = $(".article_comment");
   	articleGroups = Array.from(articleGroups);
-  	$(articleGroups[0]).show();
+  	var articleSelector = $(articleGroups[0]).data("article-id");
+	$("#" + articleSelector).show();
 
     var select = $(".article_comment");
     select = Array.from(select);
@@ -66,4 +73,35 @@ function blogScript(){
 				$("#" + articleSelector).show();
 		    });
     });
+
+    // #admin : Affichage des articles via menu déroulant
+  	 
+  	var adminArticles = $(".admin-articles");
+  	$(adminArticles).hide();
+  	articleSelectors = Array.from($('.article_selector'));
+  	var articleSelector = $(articleSelectors[0]).data("article-id");
+  	console.log(articleSelector);
+	$("#" + articleSelector).show();
+
+    var selectArticles = $(".article_selector");
+    selectArticles = Array.from(selectArticles);
+    selectArticles.forEach(function(element){
+		element.addEventListener('click', function(e){
+				var articleSelector = $(this).data("article-id");
+				$(".admin-articles").hide();
+				$("#" + articleSelector).show();
+		    });
+    });
+
+    // Messages temporaires
+    setTimeout(function(){ $('.temp').fadeOut() }, 1500);
+
+    $(function() {
+	   $(".nav-item").click(function() {
+	      // remove classes from all
+	      $(".nav-item").removeClass("active");
+	      // add class to the one we clicked
+	      $(this).addClass("active");
+	   });
+	});
 }

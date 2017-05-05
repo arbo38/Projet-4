@@ -20,10 +20,10 @@ class CommentController extends AppController{
 				$commentId = (int) $_GET['id'];
 				$update = $this->commentModel->update($commentId, ['pseudo' => $pseudo, 'comment' => $content]);
 				if($update){
-					$message = 'success';
+					$message = ['type' => 'success', 'message' => 'Le commentaire a été mis à jour'];
 				}
 			} else {
-				$message = 'error-update';
+				$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 			}
 		}
 
@@ -31,7 +31,7 @@ class CommentController extends AppController{
 			$commentId = (int) $_GET['id'];
 			$comment = $this->commentModel->find($commentId);
 		} else {
-				$message = 'error';
+				$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 		}
 		$form = new \Core\HTML\BootstrapForm($comment);
 		$this->render('admin.comment.edit', compact('form', 'comment', 'message'));
@@ -47,20 +47,20 @@ class CommentController extends AppController{
 					if($this->commentModel->delete($commentId)){
 						$message = 'success';
 					} else {
-						$message = 'error';
+						$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 					}
 				} elseif($deleteMethod == 'cascade'){
 					if($this->commentModel->deleteWithChildren($commentId)){
-						$message = 'success-cascade';
+						$message = ['type' => 'success', 'message' => 'Le message et ses réponses ont été supprimé'];
 					} else {
-						$message = 'error';
+						$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 					}
 				} else {
-					$message = 'error';
+					$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 				}
 			}
 		} else {
-			$message = 'error';
+			$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 		}
 		$this->render('admin.comment.delete', compact('message'));
 	}

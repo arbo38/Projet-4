@@ -1,37 +1,41 @@
 
-
 <h1>Panneau d'administration</h1>
 
-<?= $message ?>
-
 <div class="row">
+
+
+
 	<div class="col-sm-6">
-		<h2>Administrer les articles</h2>
+		<hr />
+		<h4>Les 5 derniers articles</h4>
+		<hr />
 
 		<table class="table table-hover table-bordered">
 			<thead>
 				<tr>
-					<td>ID</td>
-					<td>Catégorie</td>
+					<td style="width: 10%;">ID</td>
+					<td style="width: 15%;">Catégorie</td>
+					<td style="width: 50%;">Titre</td>
 					<td>Actions</td>
 				</tr>
 			</thead>
 			<tbody>
 				<?php 
-				foreach ($articles as $article) {
+				foreach ($lastArticles as $article) {
 					$id = $article->id;
 					$titre = $article->titre;
 					$actions = "
-					<a class='btn btn-primary' href='?page=article.edit&id=$id'>Editer
+					<a class='btn btn-primary ' href='?page=article.edit&id=$id'>Editer
 					</a>
 					<form method='post' style='display:inline;'>
 						<input type='hidden' name='deleteArticle' value='$id'/>
-						<button class='btn btn-warning suppressionArticle'>Supprimer</button>
+						<button class='btn btn-warning btn-sm suppressionArticle'>Supprimer</button>
 					</form>
 					";
 					$html = "
 					<tr>
 						<td>$id</td>
+						<td>$article->categorie</td>
 						<td>$titre</td>
 						<td><div class='text-center'>$actions</div></td>
 					</tr>";
@@ -43,14 +47,126 @@
 		<a class="btn btn-success" href="?page=article.create">Ajouter un article</a>
 	</div> <!-- div.col-sm-6 -->
 	<div class="col-sm-6">
+		<hr />
+		<h4>Les 10 derniers commentaires</h4>
+		<hr />
+
+		<div class="panel-group" id="commentAccordion" role="tablist" aria-multiselectable="true">
+			
+			<?php foreach ($lastComments as $comment) {
+				$heading = 'heading-comment-' . $comment->id;
+				$identifier = 'comment-' . $comment->id;
+				$html = '<div class="panel panel-default">
+				<div class="panel-heading" role="tab" id="'.$heading.'">
+					<h5 class="panel-title">
+						<a role="button" data-toggle="collapse" data-parent="#commentAccordion" href="#'.$identifier.'" aria-expanded="true" aria-controls="collapseOne">
+							Commentaire numéro '.$comment->id.' de <em>'.$comment->pseudo.'</em>, article <em>'.$comment->articleTitle.' </em>
+						</a>
+					</h5>
+				</div>
+				<div id="'.$identifier.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="'.$heading.'">
+					<div class="panel-body">
+						<p>'.$comment->content.'</p>
+						<div>
+							<a class="btn btn-primary btn-sm" href="?page=comment.edit&id='.$comment->id.'">Editer
+							</a>
+							<div>
+								<form method="post" action="?page=comment.delete" style="display:inline;">
+									<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
+									<input type="hidden" name="deleteMethod" value="simple"/>
+									<button class="btn btn-warning btn-sm suppressionCommentaire">Supprimer</button>
+								</form>
+							</div>
+							<div>
+								<form method="post" action="?page=comment.delete" style="display:inline;">
+									<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
+									<input type="hidden" name="deleteMethod" value="cascade"/>
+									<button class="btn btn-danger btn-sm suppressionCommentaire">Supprimer en cascade</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>';
+			echo $html;
+		} ?>
+	</div>
+</div>
+</div> <!-- div.row -->
+
+
+<div class="row">
+	<div class="col-sm-12">
+		<hr />
+		<h2>Administrer les articles</h2>
+		<hr />
+		<!-- Nav tabs -->
+		<form>
+			<select class="form-control">
+				<?php 
+				foreach($articles as $article){
+					$html = '<option data-article-id="article_id_'.$article->id.'" class="article_selector" >'.$article->titre.' - article N° '.$article->id.'</option>';
+					echo $html;
+				}
+				?>
+			</select>
+		</form>
+		<table class="table table-hover table-bordered">
+			<thead>
+				<tr>
+					<td style="width: 10%;">ID</td>
+					<td style="width: 15%;">Catégorie</td>
+					<td style="width: 50%;">Titre</td>
+					<td>Actions</td>
+				</tr>
+			</thead>
+			<tbody>
+				<?php 
+				foreach ($lastArticles as $article) {
+					$id = $article->id;
+					$titre = $article->titre;
+					$actions = "
+					<a class='btn btn-primary ' href='?page=article.edit&id=$id'>Editer
+					</a>
+					<form method='post' style='display:inline;'>
+						<input type='hidden' name='deleteArticle' value='$id'/>
+						<button class='btn btn-warning btn-sm suppressionArticle'>Supprimer</button>
+					</form>
+					";
+					$html = "
+					<tr class='admin-articles' id='article_id_".$article->id."'>
+						<td>$id</td>
+						<td>$article->categorie</td>
+						<td>$titre</td>
+						<td><div class='text-center'>$actions</div></td>
+					</tr>";
+					echo $html;
+				}
+				?>
+			</tbody>
+		</table> <!-- table.table -->
+
+
+
+
+
+
+
+<a class="btn btn-success" href="?page=article.create">Ajouter un article</a>
+</div> <!-- div.col-sm-12 -->
+</div> <!-- div.row -->
+<div class="row">
+	<div class="col-sm-12">
+		<hr />
 		<h2>Administrer les catégories</h2>
+		<hr />
 
 		<table class="table table-hover table-bordered">
 			<thead>
 				<tr>
 					<td>ID</td>
-					<td>Titre</td>
-					<td>Actions</td>
+					<td style="width: 60%;">Titre</td>
+					<td >Actions</td>
 				</tr>
 			</thead>
 			<tbody>
@@ -63,7 +179,7 @@
 					</a>
 					<form method='post' style='display:inline;'>
 						<input type='hidden' name='deleteCategorie' value='$id'/>
-						<button class='btn btn-warning suppressionCategorie'>Supprimer</button>
+						<button class='btn btn-warning btn-sm suppressionCategorie'>Supprimer</button>
 					</form>
 					";
 					$html = "
@@ -82,130 +198,87 @@
 </div> <!-- div.row -->
 
 <div class="row">
-<h2>Administrer les commentaires</h2>
-	<div class="col-sm-3">
-		<div class="panel-group" id="commentAccordion" role="tablist" aria-multiselectable="true">
-			<h4>Les 5 derniers commentaires</h4>
-			<?php foreach ($lastComments as $comment) {
-				$heading = 'heading-comment-' . $comment->id;
-				$identifier = 'comment-' . $comment->id;
-				$html = '<div class="panel panel-default">
-				<div class="panel-heading" role="tab" id="'.$heading.'">
-					<h4 class="panel-title">
-						<a role="button" data-toggle="collapse" data-parent="#commentAccordion" href="#'.$identifier.'" aria-expanded="true" aria-controls="collapseOne">
-							Commentaire numéro '.$comment->id.' de <em>'.$comment->pseudo.'</em>, article <em>'.$comment->articleTitle.' </em>
-						</a>
-					</h4>
-				</div>
-				<div id="'.$identifier.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="'.$heading.'">
-					<div class="panel-body">
-						<p>'.$comment->content.'</p>
-						<div>
-							<a class="btn btn-primary" href="?page=comment.edit&id='.$comment->id.'">Editer
-							</a>
-							<div>
-							<form method="post" action="?page=comment.delete" style="display:inline;">
-								<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
-								<input type="hidden" name="deleteMethod" value="simple"/>
-								<button class="btn btn-warning suppressionCommentaire">Supprimer</button>
-							</form>
-							</div>
-							<div>
-							<form method="post" action="?page=comment.delete" style="display:inline;">
-								<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
-								<input type="hidden" name="deleteMethod" value="cascade"/>
-								<button class="btn btn-danger suppressionCommentaire">Supprimer en cascade</button>
-							</form>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>';
-			echo $html;
-		} ?>
-	</div>
-</div>
+	<div class="col-sm-12">
+		<h2>Administrer les commentaires par articles</h2>
+		<hr />
 
+		<h3>Tous les commentaires</h2>
+			<div>
+				<!-- Nav tabs -->
+				<form>
+					<select class="form-control">
+						<?php 
+						foreach($commentsByArticle as $article => $comments){
+							$articleData = explode('-', $article);
+							$articleTitle = trim($articleData[0]);
+							$articleId = trim($articleData[1]);
 
+							$html = '<option data-article-id="comments_article_id_'.$articleId.'" class="article_comment" >'.$articleTitle.'</option>';
+							echo $html;
 
+						}
+						?>
+					</select>
+				</form>
+				<!-- Tab panes -->
+				<div class="tab-content" style="margin-bottom: 200px;">
+					<?php 
+					foreach($commentsByArticle as $article => $comments){
+						if(!empty($comments[0]->content)){
+							$articleData = explode('-', $article);
+							$articleTitle = trim($articleData[0]);
+							$articleId = trim($articleData[1]);
 
-<div class="col-sm-9">
-	<h3>Tous les commentaires</h2>
-	<div>
-		<!-- Nav tabs -->
-		<form>
-			<select class="form-control">
-			<?php 
-			foreach($commentsByArticle as $article => $comments){
-				$articleData = explode('-', $article);
-				$articleTitle = trim($articleData[0]);
-				$articleId = trim($articleData[1]);
+							$html = '<div id="comments_article_id_'.$articleId.'" class="comments_list" style="display: none;" >';
+							foreach ($comments as $comment) {
+								$actions = '<div>
+								<a class="btn btn-primary btn-sm" href="?page=comment.edit&id='.$comment->id.'">Editer
+								</a>
+								<div>
+									<form method="post" action="?page=comment.delete" style="display:inline;">
+										<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
+										<input type="hidden" name="deleteMethod" value="simple"/>
+										<button class="btn btn-sm btn-warning suppressionCommentaire">Supprimer</button>
+									</form>
+								</div>
+								<div>
+									<form method="post" action="?page=comment.delete" style="display:inline;">
+										<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
+										<input type="hidden" name="deleteMethod" value="cascade"/>
+										<button class="btn btn-sm btn-danger suppressionCommentaire">Supprimer en cascade</button>
+									</form>
+								</div>
+							</div>';
+							$id = $comment->id;
+							$auteur = $comment->pseudo;
+							$contenu = $comment->content;
+							$html .= '<table class="table table-hover table-bordered">
+							<thead>
+								<tr>
+									<td>ID</td>
+									<td>Auteur</td>
+									<td style="width:50%;">Contenu</td>
+									<td style="width:30%;">Actions</td>
+								</tr>
+							</thead>
+							<tbody>';
+								$html .= '<tr>
+								<td>'.$id.'</td>
+								<td>'.$auteur.'</td>
+								<td>'.$contenu.'</td>
+								<td><div class="">'.$actions.'</div></td>
+							</tr>';
+							$html .= '</tbody>
+						</table> <!-- table.table -->';
 
-				$html = '<option data-article-id="comments_article_id_'.$articleId.'" class="article_comment" >'.$articleTitle.'</option>';
-				echo $html;
+					}
+					$html .= '</div>';
+					echo $html;
+				}
 
 			}
 			?>
-			</select>
-		</form>
-		<!-- Tab panes -->
-		<div class="tab-content" style="margin-bottom: 200px;">
-			<?php 
-			foreach($commentsByArticle as $article => $comments){
-				$articleData = explode('-', $article);
-				$articleTitle = trim($articleData[0]);
-				$articleId = trim($articleData[1]);
-
-				$html = '<div id="comments_article_id_'.$articleId.'" class="comments_list" style="display: none;" >';
-				foreach ($comments as $comment) {
-					$actions = '<div>
-					<a class="btn btn-primary btn-sm" href="?page=comment.edit&id='.$comment->id.'">Editer
-					</a>
-					<div>
-					<form method="post" action="?page=comment.delete" style="display:inline;">
-						<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
-						<input type="hidden" name="deleteMethod" value="simple"/>
-						<button class="btn btn-sm btn-warning suppressionCommentaire">Supprimer</button>
-					</form>
-					</div>
-					<div>
-					<form method="post" action="?page=comment.delete" style="display:inline;">
-						<input type="hidden" name="deleteComment" value="'.$comment->id.'"/>
-						<input type="hidden" name="deleteMethod" value="cascade"/>
-						<button class="btn btn-sm btn-danger suppressionCommentaire">Supprimer en cascade</button>
-					</form>
-					</div>
-				</div>';
-				$id = $comment->id;
-				$auteur = $comment->pseudo;
-				$contenu = $comment->content;
-				$html .= '<table class="table table-hover table-bordered">
-				<thead>
-					<tr>
-						<td>ID</td>
-						<td>Auteur</td>
-						<td style="width:50%;">Contenu</td>
-						<td style="width:30%;">Actions</td>
-					</tr>
-				</thead>
-				<tbody>';
-					$html .= '<tr>
-					<td>'.$id.'</td>
-					<td>'.$auteur.'</td>
-					<td>'.$contenu.'</td>
-					<td><div class="">'.$actions.'</div></td>
-				</tr>';
-				$html .= '</tbody>
-			</table> <!-- table.table -->';
-
-		}
-		$html .= '</div>';
-		echo $html;
-	}
-	?>
 		</div>
 	</div>
-
-</div> <!-- div.col-sm-6 -->
 </div> <!-- div.row -->
 

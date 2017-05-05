@@ -15,7 +15,14 @@ class ArticleController extends AppController{
 	}
 
 	public function index(){
-		$articles = $this->articleModel->getAll();
+		$articles = $this->articleModel->getLast(3);
+		foreach ($articles as $key => $article) {
+			$dateHeure = explode(' ', $article->date);
+			$date = $dateHeure[0];
+			$date = explode('-', $date);
+			$date = $date[2] . '-' . $date[1] . '-' . $date[0];
+			$articles[$key]->date = $date; 
+		}
 		$categories = $this->categorieModel->getAll();
 		$this->render('article.index', compact('articles', 'categories'));
 	}
@@ -42,25 +49,27 @@ class ArticleController extends AppController{
 			$article_id = (int) $_GET['id'];
 			$article = $this->articleModel->get($article_id);
 			if($article === false){
-				$this->notFound();
+				return $this->notFound();
+			} else {
+				$comments = $this->commentModel->findAllWithChildren($article->id); // 
+				$this->app->setTitle($article->titre);
 			}
 		} else {
-			$this->notFound();
+			return $this->notFound();
 		}
 		if(isset($_POST['content'])&& isset($_POST['pseudo'])){
 			$message = $_POST['content'];
 			if(!empty($_POST['content']) && !empty($_POST['pseudo'])){
 				if($this->commentModel->new()){
-					$message = "Merci pour votre commentaire";
+					$message = ['type' => 'success', 'message' => 'Merci pour votre commentaire'];
 				} 
 			} else {
-				$message = "Votre commentaire ou votre pseudo est vide, votre commentaire ne peut être posté";
+				$message = ['type' => 'warning', 'message' => 'Votre commentaire ou votre pseudo est vide, votre commentaire ne peut être posté'];
 			}
 		} else {
-			$message = 'Rien';
+			$message = '';
 		}
-		$comments = $this->commentModel->findAllWithChildren($article->id); // 
-		$this->app->setTitle($article->titre);
+		
 		$categories = $this->categorieModel->getAll();
 		$this->render('article.single', compact('article_id', 'article', 'categories', 'comments', 'message'));
 	}

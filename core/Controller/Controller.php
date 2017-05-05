@@ -16,12 +16,12 @@ class Controller{
 		require($this->viewPath . 'templates/' . $this->template . '.php');
 	}
 
-	protected function notFound(){
+	public function notFound(){
 		header("HTTP/1.0 404 Not Found");
 		die('Page Introuvable');
 	}
 
-	protected function forbidden(){
+	public function forbidden(){
 		header("HTTP/1.0 403 Forbidden");
 		die('Acces Interdit');
 	}
