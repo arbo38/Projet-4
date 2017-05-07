@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Table;
+namespace App\Model;
 
-use \Core\Table\Table;
+use \Core\Model\Model;
 
-class CategorieTable extends Table {
+class CategoryModel extends Model {
 
 	public function get($id){
-		$categorie = $this->query("
+		$category = $this->query("
 			SELECT categorie
 			FROM categories
 			WHERE id = :id
 			", ['id' => $id], true, true);
-		return $categorie;
+		return $category;
 	}
 
 	public function getAll(){
@@ -25,7 +25,7 @@ class CategorieTable extends Table {
 
 	public function new(array $datas){
 		$statement = "INSERT INTO ".$this->table." (categorie)
-		VALUES (:categorie)";
+		VALUES (:category)";
 		return $this->query($statement, $datas);
 	}
 	

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Table;
+namespace App\Model;
 
-use \Core\Table\Table;
+use \Core\Model\Model;
 
-class UserTable extends Table {
+class UserModel extends Model {
 	public function get($id){
 		$user = $this->query("
 			SELECT *

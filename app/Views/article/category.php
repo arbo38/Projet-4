@@ -1,4 +1,4 @@
-<h1><?= $categorie->categorie ?></h1>
+<h1><?= $category->categorie ?></h1>
 
 <div class="row">
 	<div class="col-sm-8">
@@ -25,9 +25,9 @@
 			<br>
 			<div class="list-group">
 				<?php 
-				foreach ($categories as $categorie): ?>
-				<a class="list-group-item" href="<?= $categorie->url ?>">
-					<?= $categorie->categorie ?>
+				foreach ($categories as $category): ?>
+				<a class="list-group-item" href="<?= $category->url ?>">
+					<?= $category->categorie ?>
 				</a>
 			<?php endforeach; ?>
 		</div>

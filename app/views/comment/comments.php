@@ -1,15 +1,20 @@
 
-<div class="panel panel-default" id="comment-<?= $comment->id; ?>">
-	<div class="panel-body">
-	<p><?= htmlentities($comment->comment); ?></p>
-	<p class="text-primary"><em><?= htmlentities($comment->pseudo); ?></em></p>
-		<?php if($comment->depth <= 2): ?>
-			<p class="text-right">
-				<button class="btn btn-default reply" data-id="<?= $comment->id; ?>">Répondre</button>
-			</p>
-		<?php endif; ?>
-	</div>
+<!--Card-->
+<div class="card" id="comment-<?= $comment->id; ?>" style="margin-bottom: 20px;">
+    <!--Card content-->
+    <div class="card-block">
+        <!--Title-->
+        <h4 class="card-title"><?= $comment->pseudo; ?></h4>
+        <!--Text-->
+        <p class="card-text"><?= $comment->comment; ?></p>
+        <?php if($comment->depth <= 2): ?>
+        <button class="btn btn-default reply" data-id="<?= $comment->id; ?>">Répondre</button>
+        <?php endif; ?>
+    </div>
+    <!--/.Card content-->
+
 </div>
+<!--/.Card-->
 
 <div style="margin-left: 50px;">
 	<?php if(isset($comment->children)): ?>

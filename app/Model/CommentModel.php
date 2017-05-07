@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Table;
+namespace App\Model;
 
-use \Core\Table\Table;
+use \Core\Model\Model;
 
-class CommentTable extends Table {
+class CommentModel extends Model {
 
-	public function find($id)
+    public function find($id)
     {
         // On récupère le commentaire à supprimer
         $comment = $this->query("
@@ -127,6 +127,11 @@ class CommentTable extends Table {
         return $success;
     }
 
+    public function deleteFromArticle($id)
+    {
+        return $this->query('DELETE FROM comments WHERE post_id = :id', ['id' => $id]);
+    }
+
 
     /**
      * Permet de supprimer un commentaire et ces enfants
@@ -179,8 +184,8 @@ class CommentTable extends Table {
         } else {
             $this->query('INSERT INTO comments SET pseudo = :pseudo, comment = :comment, parent_id = :parent_id, post_id = :post_id, depth = :depth', 
                 [
-                'pseudo' => $_POST['pseudo'],
-                'comment' => $_POST['content'],
+                'pseudo' =>  strip_tags($_POST['pseudo']),
+                'comment' =>  strip_tags($_POST['content']),
                 'parent_id' => $parent_id,
                 'post_id' => $_POST['post_id'],
                 'depth' => $depth]);

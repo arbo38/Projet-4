@@ -6,7 +6,7 @@ class ArticleController extends AppController{
 	public function __construct(){
 		parent::__construct();
 		$this->loadModel('article');
-		$this->loadModel('categorie');
+		$this->loadModel('category');
 		$this->loadModel('comment');
 	}
 
@@ -15,15 +15,16 @@ class ArticleController extends AppController{
 		if(!empty($_POST)){
 			if(isset($_POST['deleteArticle'])){
 				if($this->articleModel->get($_POST['deleteArticle'])){
+					$this->commentModel->deleteFromArticle($_POST['deleteArticle']);
 					if($this->articleModel->delete($_POST['deleteArticle'])){
 						$message = ['type' => 'success', 'message' => 'L\'article a bien été supprimé'];
 						
 					}
 				}
 			}
-			if(isset($_POST['deleteCategorie'])){
-				if($this->categorieModel->get($_POST['deleteCategorie'])){
-					if($this->categorieModel->delete($_POST['deleteCategorie'])){
+			if(isset($_POST['deleteCategory'])){
+				if($this->categoryModel->get($_POST['deleteCategory'])){
+					if($this->categoryModel->delete($_POST['deleteCategory'])){
 						$message = ['type' => 'success', 'message' => 'La catégorie a bien été supprimé'];
 					}
 				}
@@ -31,14 +32,14 @@ class ArticleController extends AppController{
 		}
 		$articles = $this->articleModel->getAll();
 		$lastArticles = $this->articleModel->getLast(5);
-		$categories = $this->categorieModel->getAll();
+		$categories = $this->categoryModel->getAll();
 		$lastComments = $this->commentModel->findLast(10);
 		$commentsByArticle = $this->commentModel->findAllByArticle($articles);
 		$this->render('admin.index', compact('articles', 'categories', 'message', 'lastComments', 'commentsByArticle', 'lastArticles'));
 	}
 
 	public function newArticle(){
-		$categories = $this->categorieModel->extraction('id', 'categorie');
+		$categories = $this->categoryModel->extraction('id', 'categorie');
 		$form = new \Core\HTML\BootstrapForm();
 
 		if(!empty($_POST)){
@@ -56,7 +57,7 @@ class ArticleController extends AppController{
 
 	public function editArticle(){
 		$message = '';
-		$categories = $this->categorieModel->extraction('id', 'categorie');
+		$categories = $this->categoryModel->extraction('id', 'categorie');
 	// On regarde si l'on doit mettre à jour un article avec la présence de données en POST et d'un ID en get
 		if(!empty($_POST) && !empty($_GET)){
 			$titre = (string) $_POST['titre'];

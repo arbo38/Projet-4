@@ -9,7 +9,7 @@ class Router{
 			$this->home();
 		} elseif($page === 'article') {
 			$this->article();
-		} elseif($page === 'categorie') {
+		} elseif($page === 'categories') {
 			$this->categories();
 		} elseif($page === 'login') {
 			$this->login();
@@ -21,10 +21,10 @@ class Router{
 			$this->adminEditArticle();
 		} elseif ($page === 'article.create') {
 			$this->adminNewArticle();
-		} elseif ($page === 'categorie.create') {
-			$this->adminNewCategorie();
-		} elseif ($page === 'categorie.edit') {
-			$this->adminEditCategorie();
+		} elseif ($page === 'category.create') {
+			$this->adminNewCategory();
+		} elseif ($page === 'category.edit') {
+			$this->adminEditCategory();
 		} elseif ($page === 'comment.edit') {
 			$this->adminEditComment();
 		} elseif ($page === 'comment.delete') {
@@ -76,14 +76,14 @@ class Router{
 		$AdminArticleController->newArticle();
 	}
 
-	public function adminEditCategorie(){
-		$AdminCategorieController = new \App\Controller\Admin\CategorieController();
-		$AdminCategorieController->editCategorie();
+	public function adminEditCategory(){
+		$AdminCategoryController = new \App\Controller\Admin\CategoryController();
+		$AdminCategoryController->editCategory();
 	}
 
-	public function adminNewCategorie(){
-		$AdminCategorieController = new \App\Controller\Admin\CategorieController();
-		$AdminCategorieController->newCategorie();
+	public function adminNewCategory(){
+		$AdminCategoryController = new \App\Controller\Admin\CategoryController();
+		$AdminCategoryController->newCategory();
 	}
 
 	public function adminEditComment(){
@@ -92,8 +92,8 @@ class Router{
 	}
 
 	public function adminDeleteComment(){
-		$AdminCategorieController = new \App\Controller\Admin\CommentController();
-		$AdminCategorieController->deleteComment();
+		$AdminCommentController = new \App\Controller\Admin\CommentController();
+		$AdminCommentController->deleteComment();
 	}
 
 	public function forbidden(){

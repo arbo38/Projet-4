@@ -171,21 +171,21 @@
 			</thead>
 			<tbody>
 				<?php 
-				foreach ($categories as $categorie) {
-					$id = $categorie->id;
-					$categorie = $categorie->categorie;
+				foreach ($categories as $category) {
+					$id = $category->id;
+					$category = $category->categorie;
 					$actions = "
-					<a class='btn btn-primary' href='?page=categorie.edit&id=$id'>Editer
+					<a class='btn btn-primary' href='?page=category.edit&id=$id'>Editer
 					</a>
 					<form method='post' style='display:inline;'>
-						<input type='hidden' name='deleteCategorie' value='$id'/>
+						<input type='hidden' name='deleteCategory' value='$id'/>
 						<button class='btn btn-warning btn-sm suppressionCategorie'>Supprimer</button>
 					</form>
 					";
 					$html = "
 					<tr>
 						<td>$id</td>
-						<td>$categorie</td>
+						<td>$category</td>
 						<td><div class='text-center'>$actions</div></td>
 					</tr>";
 					echo $html;
@@ -193,7 +193,7 @@
 				?>
 			</tbody>
 		</table> <!-- table.table -->
-		<a class="btn btn-success" href="?page=categorie.create">Ajouter une catégorie</a>
+		<a class="btn btn-success" href="?page=category.create">Ajouter une catégorie</a>
 	</div> <!-- div.col-sm-6 -->
 </div> <!-- div.row -->
 

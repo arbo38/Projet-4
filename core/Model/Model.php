@@ -1,8 +1,8 @@
 <?php
 
-namespace Core\Table;
+namespace Core\Model;
 
-class Table {
+class Model {
 
 	protected $table;
 	protected $db;
@@ -13,7 +13,10 @@ class Table {
 			$tableName = explode('\\', get_class($this));
 			$tableName = end($tableName);
 			$tableName = strtolower($tableName);
-			$tableName = str_replace('table', '', $tableName) . 's';
+			$tableName = str_replace('model', '', $tableName) . 's';
+			if(substr($tableName, strlen($tableName) - 2) == 'ys'){
+				$tableName = str_replace('ys', 'ies', $tableName);
+			}
 			$this->table = $tableName;
 		}
 	}
@@ -32,13 +35,13 @@ class Table {
 			if($className === false){
 				return $this->db->prepare($statement, $attributes, null, $one);
 			} else {
-				return $this->db->prepare($statement, $attributes, str_replace('Table','Entity',get_class($this)), $one);
+				return $this->db->prepare($statement, $attributes, str_replace('Model','Entity',get_class($this)), $one);
 			}
 		} else {
 			if($className === false){
 				return $this->db->query($statement);
 			} else {
-				return $this->db->query($statement, str_replace('Table','Entity',get_class($this)), $one);
+				return $this->db->query($statement, str_replace('Model','Entity',get_class($this)), $one);
 			}
 			
 		}

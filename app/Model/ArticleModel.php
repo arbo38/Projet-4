@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Table;
+namespace App\Model;
 
-use \Core\Table\Table;
+use \Core\Model\Model;
 
-class ArticleTable extends Table {
+class ArticleModel extends Model {
 
 	public function get($id){
 		$article = $this->query("
@@ -17,7 +17,7 @@ class ArticleTable extends Table {
 	}
 
 	public function getByCategorie($id){
-		$articlesByCategorie  = $this->query("
+		$articlesByCategories  = $this->query("
 			SELECT articles.id as id, articles.titre as titre, articles.contenu as contenu, articles.date as date, articles.categorie_id as categorie_id, categories.categorie as categorie
 			FROM articles
 			LEFT JOIN categories ON articles.categorie_id = categories.id
@@ -25,7 +25,7 @@ class ArticleTable extends Table {
 			ORDER BY articles.date DESC
 			LIMIT 3
 			", ['id' => $id], true, false);
-		return $articlesByCategorie;
+		return $articlesByCategories;
 	}
 
 	public function getAll(){

@@ -8,10 +8,28 @@ Créer page 404 => OK
 Dropdown categorie => OK
 Passer la date en Français => OK
 Navbar active =>
+Commentaires sous forme de cartes et styliser le formulaire => OK
+Suppression article = suppression commentaires de l'article => OK
 
-Commentaires sous forme de cartes et styliser le formulaire
+homogénéisation des termes dans l'application (français / anglais)
+homogénéisation des fonctions controller et table, éviter la redondance
+Nouvelle BDD
+
+Signalement de commentaires
+Commentaires et Documentations
+Rendre le site Responsive
+Ajouter controls serveur (message vide, injection etc...)
+gitingnore config
+
+*Ajouter un certificat let's Encrypt
+*Déploiement en ligne
 
 
-
+// Statut article brouillon
 // 2 status : admin / invités
 // Espace membre
+
+Controle des commentaire (vide et pseudo) 
+Signalement
+
+categories

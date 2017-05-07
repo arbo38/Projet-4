@@ -39,7 +39,7 @@
               <a class="nav-link" href="index.php">Accueil</a>
             </li>
            <?php  
-            $categories = App::getInstance()->getTable('categorie')->getAll();
+            $categories = App::getInstance()->getTable('category')->getAll();
             $html = "<li class='nav-item dropdown btn-group'>
             <a class='nav-link dropdown-toggle' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Categories</a>
             <div class='dropdown-menu dropdown' aria-labelledby='dropdownMenu1'>";

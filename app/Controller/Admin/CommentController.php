@@ -6,7 +6,7 @@ class CommentController extends AppController{
 	public function __construct(){
 		parent::__construct();
 		$this->loadModel('article');
-		$this->loadModel('categorie');
+		$this->loadModel('category');
 		$this->loadModel('comment');
 	}
 

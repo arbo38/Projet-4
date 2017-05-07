@@ -2,34 +2,34 @@
 
 namespace App\Controller\Admin;
 
-class CategorieController extends AppController{
+class CategoryController extends AppController{
 
 	public function __construct(){
 		parent::__construct();
 		$this->loadModel('article');
-		$this->loadModel('categorie');
+		$this->loadModel('category');
 	}
 
-	public function newCategorie(){
+	public function newCategory(){
 		$form = new \Core\HTML\BootstrapForm();
 		if(!empty($_POST)){
-			$categorie = (string) $_POST['categorie'];
-			$new = $this->categorieModel->new(['categorie' => $categorie]);
+			$category = (string) $_POST['categorie'];
+			$new = $this->categoryModel->new(['category' => $category]);
 			if($new){
 				$_SESSION['new'] = true;
-				header('Location: admin.php?page=categorie.edit&id='.$this->app->getDb()->lastInsertId());
+				header('Location: admin.php?page=category.edit&id='.$this->app->getDb()->lastInsertId());
 			}
 		}
-		$this->render('admin.categorie.create', compact('form'));
+		$this->render('admin.category.create', compact('form'));
 	}
 
-	public function editCategorie(){
+	public function editCategory(){
 		$message = '';
 	// On regarde si l'on doit mettre à jour une categorie avec la présence de données en POST et d'un ID en get
 		if(!empty($_POST) && !empty($_GET)){
-			$categorie = (string) $_POST['categorie'];
-			$categorieId = (int) $_GET['id'];
-			$update = $this->categorieModel->update($categorieId, ['categorie' => $categorie]);
+			$category = (string) $_POST['categorie'];
+			$categoryId = (int) $_GET['id'];
+			$update = $this->categoryModel->update($categoryId, ['categorie' => $category]);
 			if($update){
 				$message = ['type' => 'success', 'message' => 'La catégorie a bien été mis à jour.'];
 				
@@ -37,8 +37,8 @@ class CategorieController extends AppController{
 		}
 	// On regarde si l'on vient pour éditer un article avec la présence d'un id
 		if(!empty($_GET)){ 
-			$categorieId = (int) $_GET['id'];
-			$categorie = $this->categorieModel->get($categorieId);
+			$categoryId = (int) $_GET['id'];
+			$category = $this->categoryModel->get($categoryId);
 			if(isset($_SESSION['new'])){
 				if($_SESSION['new']){
 					unset($_SESSION['new']);
@@ -48,8 +48,7 @@ class CategorieController extends AppController{
 		} else {
 			$message = ['type' => 'warning', 'message' => 'Aucune categorie sélectionné'];
 		}
-		$form = new \Core\HTML\BootstrapForm($categorie);
-		var_dump('troll');
-		$this->render('admin.categorie.edit', compact('form', 'message'));
+		$form = new \Core\HTML\BootstrapForm($category);
+		$this->render('admin.category.edit', compact('form', 'message'));
 	}
 }
