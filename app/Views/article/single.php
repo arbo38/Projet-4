@@ -1,5 +1,3 @@
-<?= var_dump(sha1('antony')) ?>
-
 <div class="row">
 	<div class="col-sm-8">
 		<ul>
