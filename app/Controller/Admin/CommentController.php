@@ -30,8 +30,6 @@ class CommentController extends AppController{
 			} else {
 				$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 			}
-		} else {
-			$this->notFound();
 		}
 
 		if(!empty($_GET)){

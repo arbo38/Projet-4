@@ -102,7 +102,7 @@
 		<hr />
 		<!-- Nav tabs -->
 		<form>
-			<select class="form-control">
+			<select class="form-control" id="post_selector" >
 				<?php 
 				foreach($posts as $post){
 					$html = '<option data-article-id="article_id_'.$post->id.'" class="article_selector" >'.$post->title.' - article N° '.$post->id.'</option>';
@@ -218,6 +218,12 @@
 					<?php 
 					foreach ($reportedComments as $reportedComment) {
 						$actions = '<div>
+						<div>
+							<form method="post" style="display:inline;">
+								<input type="hidden" name="unReportComment" value="'.$reportedComment->id.'"/>
+								<button class="btn btn-sm btn-success suppressionCommentaire">Retirer signalement</button>
+							</form>
+						</div>
 						<a class="btn btn-primary btn-sm" href="?page=comment.edit&id='.$reportedComment->id.'">Editer
 						</a>
 						<div>
@@ -256,7 +262,7 @@
 			<div>
 				<!-- Nav tabs -->
 				<form>
-					<select class="form-control">
+					<select class="form-control" id="comment_selector" >
 						<?php 
 						foreach($commentsByArticle as $article => $comments){
 							$articleData = explode('-', $article);

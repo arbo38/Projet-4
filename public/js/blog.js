@@ -56,38 +56,21 @@ function blogScript(){
         $comment.after($form);
     });
 
-    // Gestion du signalement d'un commentaire
-    /*
-    var url = window.location.href;
-    var signalLinks = $(".signal_link");
-    signalLinks = Array.from(signalLinks);
-    console.log(signalLinks);
-    signalLinks.forEach(function(link){
-    	var commentId = $(link).data('id');
-    	var linkUrl = url + 'signal=' + commentId;
-    	$(link).attr('href', linkUrl); 
-
-    });
-    console.log(url);
-    */
-
-
   	// #admin : Affichage des commentaires par articles
-  	 
-  	var articleGroups = $(".article_comment");
-  	articleGroups = Array.from(articleGroups);
-  	var articleSelector = $(articleGroups[0]).data("article-id");
-	$("#" + articleSelector).show();
 
-    var select = $(".article_comment");
-    select = Array.from(select);
-    select.forEach(function(element){
-		element.addEventListener('click', function(e){
-				var articleSelector = $(this).data("article-id");
-				$(".comments_list").hide();
-				$("#" + articleSelector).show();
-		    });
-    });
+  	var commentGroups = $('.comments_list');
+  	$(commentGroups).hide();
+  	var commentGroupToShow = Array.from($('.article_comment'));
+  	console.log(commentGroupToShow);
+  	commentGroupToShow = $(commentGroupToShow[0]).data('article-id');
+  	console.log(commentGroupToShow);
+  	$('#' + commentGroupToShow).show();
+
+	$("#comment_selector").change(function(){
+    	$(commentGroups).hide();
+    	var commentGroupSelector = $(this).children(":selected").data("article-id");
+    	$("#" + commentGroupSelector).show();
+	});
 
     // #admin : Affichage des articles via menu déroulant
   	 
@@ -95,18 +78,12 @@ function blogScript(){
   	$(adminArticles).hide();
   	articleSelectors = Array.from($('.article_selector'));
   	var articleSelector = $(articleSelectors[0]).data("article-id");
-  	console.log(articleSelector);
 	$("#" + articleSelector).show();
-
-    var selectArticles = $(".article_selector");
-    selectArticles = Array.from(selectArticles);
-    selectArticles.forEach(function(element){
-		element.addEventListener('click', function(e){
-				var articleSelector = $(this).data("article-id");
-				$(".admin-articles").hide();
-				$("#" + articleSelector).show();
-		    });
-    });
+    $("#post_selector").change(function(){
+    	$(adminArticles).hide();
+    	var articleSelector = $(this).children(":selected").data("article-id");
+    	$("#" + articleSelector).show();
+	});
 
     // Messages temporaires
     setTimeout(function(){ $('.temp').fadeOut() }, 1500);

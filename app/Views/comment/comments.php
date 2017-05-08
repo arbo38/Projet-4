@@ -29,7 +29,7 @@
 <div style="margin-left: 50px;">
 	<?php if(isset($comment->children)): ?>
 		<?php foreach($comment->children as $comment): ?>
-			<?php require(ROOT . '/app/views/comment/comments.php'); ?>
+			<?php require(ROOT . '/app/Views/comment/comments.php'); ?>
 		<?php endforeach; ?>
 	<?php endif; ?>
 </div>

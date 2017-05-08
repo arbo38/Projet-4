@@ -11,5 +11,3 @@
 		</a>
 	</div> <!-- div.col-sm-6 -->
 </div> <!-- div.row -->
-
-<a class='btn btn-primary' href="?page=admin.article.index">Retour au panneau d'administration</a>

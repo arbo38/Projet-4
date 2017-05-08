@@ -218,8 +218,15 @@ class CommentModel extends Model {
             return ['type' => 'success', 'message' => 'Le commentaire a bien été signalé'];
         } else {
             return ['type' => 'warning', 'message' => 'Une erreur est survenue lors du signalement du commentaire'];
-        }
-        
+        } 
+    }
+
+    public function unReport($id){
+        if($this->update($id, ['report' => '0'])){
+            return ['type' => 'success', 'message' => 'Le commentaire n\'est plus listé comme signalé'];
+        } else {
+            return ['type' => 'warning', 'message' => 'Une erreur est survenue lors de la mise à jour du statut du commentaire.'];
+        } 
     }
 
     public function getReportedComments(){

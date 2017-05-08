@@ -20,6 +20,9 @@ class ArticleController extends AppController{
 	public function index(){
 		$message = '';
 		if(!empty($_POST)){
+			if(isset($_POST['unReportComment'])){
+				$message = $this->commentModel->unReport($_POST['unReportComment']);
+			}
 			if(isset($_POST['deleteArticle'])){
 				if($this->postModel->get($_POST['deleteArticle'])){
 					$this->commentModel->deleteFromArticle($_POST['deleteArticle']);

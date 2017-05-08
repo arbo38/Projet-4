@@ -56,7 +56,7 @@
 	<h3 class="col-sm-6 offset-sm-1">Commentaires: </h3>
 	<div class="col-sm-6 offset-sm-1">
 		<?php foreach($comments as $comment): ?>
-			<?php require(ROOT . '/app/views/comment/comments.php'); ?>
+			<?php require(ROOT . '/app/Views/comment/comments.php'); ?>
 		<?php endforeach; ?>
 		<div class="card" id="form-comment" style="margin-bottom: 20px;">
 			<!--Card content-->
