@@ -56,6 +56,21 @@ function blogScript(){
         $comment.after($form);
     });
 
+    // Gestion du signalement d'un commentaire
+    /*
+    var url = window.location.href;
+    var signalLinks = $(".signal_link");
+    signalLinks = Array.from(signalLinks);
+    console.log(signalLinks);
+    signalLinks.forEach(function(link){
+    	var commentId = $(link).data('id');
+    	var linkUrl = url + 'signal=' + commentId;
+    	$(link).attr('href', linkUrl); 
+
+    });
+    console.log(url);
+    */
+
 
   	// #admin : Affichage des commentaires par articles
   	 

@@ -2,15 +2,20 @@
 
 namespace App\Router;
 
+/**
+     * Gère l'appel au controller en fonction des pages demandées. 
+*/
+
 class Router{
 
 	public function __construct($page){
+		// Appel de la fonction correspondant à la page $page
 		if($page === 'home'){
 			$this->home();
 		} elseif($page === 'article') {
 			$this->article();
-		} elseif($page === 'categories') {
-			$this->categories();
+		} elseif($page === 'category') {
+			$this->getPostsByCategory();
 		} elseif($page === 'login') {
 			$this->login();
 		} elseif($page === 'logout') {
@@ -46,9 +51,9 @@ class Router{
 		$ArticleController->show();
 	}
 
-	public function categories(){
+	public function getPostsByCategory(){
 		$ArticleController = new \App\Controller\ArticleController();
-		$ArticleController->categories();
+		$ArticleController->getPostsByCategory();
 	}
 
 	public function login(){

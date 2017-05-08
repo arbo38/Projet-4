@@ -1,9 +1,9 @@
 <div class="row">
 	<!--Main column-->
 	<div class="col-lg-8">
-		<?php foreach ($articles as $article): ?>
-			<h1 class="h1-responsive"><a href="<?= $article->getURL(); ?>"><?= $article->titre; ?></a> - <small class="text-muted"><?= $article->categorie ?></small></h1>
-			<h5>Auteur: <a href="">Jean Forteroche</a>, le <?= $article->date ?></h5>
+		<?php foreach ($posts as $post): ?>
+			<h1 class="h1-responsive"><a href="<?= $post->getURL(); ?>"><?= $post->title; ?></a> - <small class="text-muted"><?= $post->category ?></small></h1>
+			<h5>Auteur: <a href="">Jean Forteroche</a>, le <?= $post->date ?></h5>
 			<br>
 			<!--Featured image -->
 			<div class="view overlay hm-white-light z-depth-1-half">
@@ -12,29 +12,27 @@
 				</div>
 			</div>
 
-			<?= $article->getExtrait(); ?>
+			<?= $post->getExtrait(); ?>
 
 		<?php endforeach; ?>
 
 	</div> <!-- div.col-sm-8 -->
 
 	<div class="col-sm-4">
-		<div class="widget-wrapper wow fadeIn" data-wow-delay="0.4s">
+		<div class="widget-wrapper">
 			<h4>Categories:</h4>
 			<br>
 			<div class="list-group">
 				<?php 
-				foreach ($categories as $categorie): ?>
-				<a class="list-group-item" href="<?= $categorie->url ?>">
-					<?= $categorie->categorie ?>
+				foreach ($categories as $category): ?>
+				<a class="list-group-item" href="<?= $category->url ?>">
+					<?= $category->title ?>
 				</a>
 			<?php endforeach; ?>
 		</div>
 	</div>
 
-	<div class="widget-wrapper wow fadeIn" data-wow-delay="0.6s">
-            <h4>Subscription form:</h4>
-            <br>
+	<div class="widget-wrapper">
             <div class="card">
               <div class="card-block">
                 <p><strong>Suivre ce blog</strong></p>

@@ -2,6 +2,10 @@
 
 namespace Core\Model;
 
+/**
+     * Parent générique de tous les Model, permet l'héritage de fonctions spécifiques à l'accès à la BDD.
+*/
+
 class Model {
 
 	protected $table;
@@ -30,7 +34,7 @@ class Model {
 		return $return;
 	}
 
-	public function query($statement, $attributes = null, $className = false, $one = false){
+	protected function query($statement, $attributes = null, $className = false, $one = false){
 		if($attributes){
 			if($className === false){
 				return $this->db->prepare($statement, $attributes, null, $one);
@@ -45,6 +49,39 @@ class Model {
 			}
 			
 		}
+	}
+
+	public function get($itemId){
+		$item = $this->query("
+			SELECT *
+			FROM ".$this->table."
+			WHERE id = :id
+			", ['id' => $itemId], true, true);
+		return $item;
+	}
+
+	public function getAll(){
+		$items  = $this->query("
+			SELECT *
+			FROM ".$this->table."
+			", null, true);
+		return $items;
+	}
+
+	public function add($data){
+		$columns = "";
+		$attributes = [];
+		$values = "";
+		foreach ($data as $key => $value) {
+			$columns .= "$key,";
+			$values .= ":$key,";
+			$attributes[$key] = $value;
+		}
+		$columns = substr($columns, 0, (strlen($columns)-1));
+		$values = substr($values, 0, (strlen($values)-1));
+		$statement = "INSERT INTO ".$this->table." ($columns)
+		VALUES ($values)";
+		return $this->query($statement, $attributes);
 	}
 
 	public function update(int $id, array $datas){
@@ -67,5 +104,4 @@ class Model {
 		return $this->query($statement, ['id' => $id]);
 	}
 
-	
 }

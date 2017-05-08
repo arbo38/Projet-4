@@ -11,8 +11,8 @@
 </div> <!-- div.row -->
 
 <form method="post" action="">
-	<?= $form->input('titre', 'Titre de l\'article'); ?>
-	<?= $form->input('contenu', 'Contenu', ['type' => 'textarea']); ?>
-	<?= $form->select('categorie_id', 'Categorie', $categories); ?>
+	<?= $form->input('title', 'Titre de l\'article'); ?>
+	<?= $form->input('content', 'Contenu', ['type' => 'textarea']); ?>
+	<?= $form->select('category_id', 'Categorie', $categories); ?>
 	<?= $form->submit(); ?>
 </form>

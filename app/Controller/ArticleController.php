@@ -5,72 +5,93 @@ namespace App\Controller;
 use \App\Controller\AppController;
 use \App;
 
+/**
+     * Controller gérant le rendu des pages liées aux articles
+*/
+
 class ArticleController extends AppController{
 
 	public function __construct(){
 		parent::__construct();
-		$this->loadModel('article');
+		// Chargement des Model propre au controller
+		$this->loadModel('post');
 		$this->loadModel('category');
 		$this->loadModel('comment');
 	}
 
+	/**
+     * Affiche la page index
+     */
+
 	public function index(){
-		$articles = $this->articleModel->getLast(3);
-		foreach ($articles as $key => $article) {
-			$dateHeure = explode(' ', $article->date);
+		$posts = $this->postModel->getLast(3);
+		foreach ($posts as $key => $post) {
+			// Reformatage de la date en français
+			$dateHeure = explode(' ', $post->date);
 			$date = $dateHeure[0];
 			$date = explode('-', $date);
 			$date = $date[2] . '-' . $date[1] . '-' . $date[0];
-			$articles[$key]->date = $date; 
+			$posts[$key]->date = $date; 
 		}
 		$categories = $this->categoryModel->getAll();
-		$this->render('article.index', compact('articles', 'categories'));
+		$this->render('article.index', compact('posts', 'categories'));
 	}
 
-	public function categories(){
+	/**
+     * Affiche la page des articles appartenant à une catégorie
+     */
 
+	public function getPostsByCategory(){
+		$message;
 		if(isset($_GET['id']) && !empty($_GET['id'])){
-			$categorieId = (int) $_GET['id'];
-			$articlesByCategorie = $this->articleModel->getByCategorie($categorieId);
+			$categoryId = (int) $_GET['id'];
+			$postsByCategory = $this->postModel->getPostsByCategory($categoryId);
 			$categories = $this->categoryModel->getAll();
-			$category = $this->categoryModel->get($categorieId);
+			$category = $this->categoryModel->get($categoryId);
 		} else {
 			$this->notFound();
 		}
 		if(empty($articlesByCategorie)){
-			$this->notFound();
+			$message = ['type' => 'warning', 'message' => 'Aucun article dans cette catégorie'];
 		}
-		$this->render('article.category', compact('categorieId', 'articlesByCategorie', 'categories', 'category'));
+		$this->render('article.category', compact('categoryId', 'postsByCategory', 'categories', 'category'));
 	}
+
+	/**
+     * Affiche la page d'un article
+     */
 
 	public function show(){
 		$message = '';
 		if(isset($_GET['id']) && !empty($_GET['id'])){
-			$article_id = (int) $_GET['id'];
-			$article = $this->articleModel->get($article_id);
-			if($article === false){
+			$post_id = (int) $_GET['id'];
+			$post = $this->postModel->get($post_id);
+			if($post === false){
 				return $this->notFound();
 			} else {
+				// Si un commentaire a été signalé
+				if(isset($_POST['report_comment'])){
+					$commentId = (int) $_POST['report_comment'];
+					$message = $this->commentModel->report($commentId);
+				}
+				// Si un commentaire a été posté : 
 				if(isset($_POST['content'])&& isset($_POST['pseudo'])){
-			//$message = $_POST['content'];
 					if(!empty($_POST['content']) && !empty($_POST['pseudo'])){
-						if($this->commentModel->new()){
-							$message = ['type' => 'success', 'message' => 'Merci pour votre commentaire'];
-						} 
+						$message = $this->commentModel->add();
+							
+						
 					} else {
 						$message = ['type' => 'warning', 'message' => 'Votre commentaire ou votre pseudo est vide, votre commentaire ne peut être posté'];
 					}
-				} else {
-					$message = '';
-				}
-				$comments = $this->commentModel->findAllWithChildren($article->id); // 
-				$this->app->setTitle($article->titre);
+				} 
+				$comments = $this->commentModel->getAllWithChildren($post->id); // 
+				$this->app->setTitle($post->title);
 			}
 		} else {
 			return $this->notFound();
 		}
 		$categories = $this->categoryModel->getAll();
-		$this->render('article.single', compact('article_id', 'article', 'categories', 'comments', 'message'));
+		$this->render('article.single', compact('post_id', 'post', 'categories', 'comments', 'message'));
 	}
 
 }

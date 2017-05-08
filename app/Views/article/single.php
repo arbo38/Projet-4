@@ -1,12 +1,14 @@
+<?= var_dump(sha1('antony')) ?>
+
 <div class="row">
 	<div class="col-sm-8">
 		<ul>
-			<h2><?= $article->titre ?></h2>
-			<p><em><?= $article->categorie ?></em></p>
+			<h2><?= $post->title ?></h2>
+			<p><em><?= $post->category ?></em></p>
 
 
 			<p>
-				<?= $article->contenu; ?>
+				<?= $post->content; ?>
 			</p>
 		</ul>
 		
@@ -18,9 +20,9 @@
 			<br>
 			<div class="list-group">
 				<?php 
-				foreach ($categories as $categorie): ?>
-				<a class="list-group-item" href="<?= $categorie->url ?>">
-					<?= $categorie->categorie ?>
+				foreach ($categories as $category): ?>
+				<a class="list-group-item" href="<?= $category->url ?>">
+					<?= $category->title ?>
 				</a>
 			<?php endforeach; ?>
 		</div>
@@ -53,6 +55,7 @@
 
 </div> <!-- div.row -->
 <div class="row">
+	<h3 class="col-sm-6 offset-sm-1">Commentaires: </h3>
 	<div class="col-sm-6 offset-sm-1">
 		<?php foreach($comments as $comment): ?>
 			<?php require(ROOT . '/app/views/comment/comments.php'); ?>
@@ -63,7 +66,7 @@
 
 				<form action=""  method="post">
 					<input type="hidden" name="parent_id" value="0" id="parent_id">
-					<input type="hidden" name="post_id" value="<?= $article->id ?>" id="post_id">
+					<input type="hidden" name="post_id" value="<?= $post->id ?>" id="post_id">
 					<h4>Poster un commentaire</h4>       
 					<div class="form-group">
 						<textarea name="content" id="content" class="form-control" placeholder="Votre commentaire" required></textarea>

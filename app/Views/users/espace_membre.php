@@ -12,7 +12,7 @@
 			<td><?= $user->id ?></td>
 			<td><?= $user->username ?></td>
 			<td><?= $user->email ?></td>
-			<td><?= $user->id ?></td>
+			<td><?= $user->status ?></td>
 		</tr>
 	</tbody>
 </table> <!-- table.table -->

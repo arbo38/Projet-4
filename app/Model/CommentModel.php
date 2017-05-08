@@ -4,40 +4,41 @@ namespace App\Model;
 
 use \Core\Model\Model;
 
+/**
+     * Gère les accès à la BDD pour les commentaires
+*/
+
 class CommentModel extends Model {
 
-    public function find($id)
-    {
-        // On récupère le commentaire à supprimer
-        $comment = $this->query("
-         SELECT *
-         FROM comments
-         WHERE id = :id
-         ", ['id' => $id], true, true);
+    /**
+     * Récupère tous les commentaires de tous les articles
+     * @param  int $post : id du commentaire
+     * @return array $commentsByposts : contient les commentaire récupérés par articles
+     */
 
-        if ($comment === false) {
-            throw new \Exception("Ce commentaire n'existe pas");
-        }
-        return $comment;
-    }
-
-    public function findAllByArticle(array $articles){
-        $commentsByArticles = [];
-        foreach ($articles as $article) {
-            $key = $article->titre . ' - ' . $article->id;
-            $commentsByArticles[$key] = $this->query("SELECT articles.id AS articleId, articles.titre as articleTitle, comments.id as id, comments.comment as content, comments.pseudo as pseudo FROM `articles` LEFT JOIN comments ON articles.id = comments.post_id WHERE articles.id = ".$article->id."
+    public function getAllByPosts(array $posts){
+        $commentsByposts = [];
+        foreach ($posts as $post) {
+            $key = $post->title . ' - ' . $post->id;
+            $commentsByposts[$key] = $this->query("SELECT posts.id AS articleId, posts.title as articleTitle, comments.id as id, comments.comment as content, comments.pseudo as pseudo FROM `posts` LEFT JOIN comments ON posts.id = comments.post_id WHERE posts.id = ".$post->id."
                 ");
         }
-        return $commentsByArticles;
+        return $commentsByposts;
     }
 
-    public function findLast(int $number)
+    /**
+     * Récupère les dernier commentaires
+     * @param $number : nombre de commentaire souhaités
+     * @return array : contient les commentaire récupérés
+     */
+
+    public function getLast(int $number)
     {
         // On récupère le commentaire à supprimer
         $comments = $this->query("
-         SELECT comments.id as id, pseudo, comments.comment as content, articles.titre as articleTitle, articles.id as post_id 
+         SELECT comments.id as id, pseudo, comments.comment as content, posts.title as articleTitle, posts.id as post_id 
          FROM comments
-         LEFT JOIN articles ON comments.post_id = articles.id
+         LEFT JOIN posts ON comments.post_id = posts.id
          ORDER BY id DESC
          LIMIT ".$number."
          ", false, true, false);
@@ -49,11 +50,11 @@ class CommentModel extends Model {
     }
 
     /**
-     * Récupère tous les commentaire organisé par ID
+     * Récupère tous les commentaire organisé par ID de l'article
      * @param $post_id
      * @return array
      */
-    public function findAllById($post_id)
+    public function getAllById($post_id)
     {
         $comments  = $this->query("
          SELECT *
@@ -73,11 +74,11 @@ class CommentModel extends Model {
      * @param bool $unset_children Doit-t-on supprimer les commentaire qui sont des enfants des résultats ?
      * @return array
      */
-    public function findAllWithChildren($post_id, $unset_children = true)
+    public function getAllWithChildren($post_id, $unset_children = true)
     {
         // On a besoin de 2 variables
         // comments_by_id ne sera jamais modifié alors que comments
-        $comments = $comments_by_id = $this->findAllById($post_id);
+        $comments = $comments_by_id = $this->getAllById($post_id);
         foreach ($comments as $id => $comment) {
             if ($comment->parent_id != 0) {
                 $comments_by_id[$comment->parent_id]->children[] = $comment;
@@ -89,13 +90,37 @@ class CommentModel extends Model {
         return $comments;
     }
 
-    public function getChildren($commentId){
-        $comments  = $this->query("
-         SELECT *
-         FROM ".$this->table."
-         WHERE parent_id = :commentId
-         ", ['parent_id' => $commentId], true, false);
-        return $comments;
+    /**
+     * Ajoute un commentaire à la bdd
+     * @param obligation d'avoir data a cause de la class parente, null ici car données en POST
+     * @return array $message : information sur le déroulement de l'opération
+     */
+
+    public function add($data = null){ // 
+        $parent_id = isset($_POST['parent_id']) ? $_POST['parent_id'] : 0;
+        $depth = 0;
+
+        if ($parent_id != 0) {
+        $comment = $this->query('SELECT id, depth FROM comments WHERE id = ?', [$parent_id], true, true);
+            if($comment === false){
+                $message = ['type' => 'danger', 'message' => 'Une réponse doit avoir un message parrent.'];
+            } else {
+                $depth = $comment->depth + 1;
+            } 
+        }
+        if($depth >= 3){
+            $message = ['type' => 'warning', 'message' => 'Limite de profondeur atteinte pour ce commentaire'];
+        } else {
+            $this->query('INSERT INTO comments SET pseudo = :pseudo, comment = :comment, parent_id = :parent_id, post_id = :post_id, depth = :depth', 
+                [
+                'pseudo' =>  strip_tags($_POST['pseudo']),
+                'comment' =>  strip_tags($_POST['content']),
+                'parent_id' => $parent_id,
+                'post_id' => $_POST['post_id'],
+                'depth' => $depth]);
+            $message = ['type' => 'success', 'message' => 'Merci pour votre commentaire'];
+        }
+    return $message;
     }
 
     /**
@@ -104,7 +129,7 @@ class CommentModel extends Model {
      */
     public function delete($id)
     {
-        $comment = $this->find($id);
+        $comment = $this->get($id);
         $depth = (int) $comment->depth;
         $success = true;
         // On supprime le commentaire
@@ -127,22 +152,28 @@ class CommentModel extends Model {
         return $success;
     }
 
+    /**
+     * Supprime tous les commentaires liés à un article
+     * @param int $id : id de l'article
+     * @return bool : suppression réussie
+     */
+
     public function deleteFromArticle($id)
     {
         return $this->query('DELETE FROM comments WHERE post_id = :id', ['id' => $id]);
     }
 
-
     /**
-     * Permet de supprimer un commentaire et ces enfants
-     * @param $id
-     * @return int
+     * Supprime un commentaire et tous ses "enfants"
+     * @param int $id : commentaire a supprimer
+     * @return bool = suppression réussie
      */
+
     public function deleteWithChildren($id)
     {
         // On récupère le commentaire à supprimer
-        $comment = $this->find($id);
-        $comments = $this->findAllWithChildren($comment->post_id, false);
+        $comment = $this->get($id);
+        $comments = $this->getAllWithChildren($comment->post_id, false);
         $ids = $this->getChildrenIds($comments[$comment->id]);
         $ids[] = $comment->id;
 
@@ -151,9 +182,9 @@ class CommentModel extends Model {
     }
 
     /**
-     * Get all chidren ids of a comment
-     * @param $comment
-     * @return array
+     * Récupère les id de tous les commentaire enfant d'un commentaire
+     * @param $comment : le commantaire parent
+     * @return array : contenant tous les ids des enfants
      */
     private function getChildrenIds($comment)
     {
@@ -167,47 +198,38 @@ class CommentModel extends Model {
         return $ids;
     }
 
-    public function new(){
-        $parent_id = isset($_POST['parent_id']) ? $_POST['parent_id'] : 0;
-        $depth = 0;
+    /**
+     * Récupère les commentaires enfant d'un commentaire
+     * @param $comment : le commantaire parent
+     * @return array : contenant tous les ids des enfants
+     */
 
-        if ($parent_id != 0) {
-        $comment = $this->query('SELECT id, depth FROM comments WHERE id = ?', [$parent_id], true, true);
-        if($comment === false){
-            throw new Exception('Ce parent n\'existe pas');
-        } 
-        $depth = $comment->depth + 1;
-        }
+    private function getChildren($commentId){
+        $comments  = $this->query("
+         SELECT *
+         FROM ".$this->table."
+         WHERE parent_id = :commentId
+         ", ['commentId' => $commentId], true, false);
+        return $comments;
+    }
 
-        if($depth > 3){
-            $message = 'Limite de profondeur atteinte pour ce commentaire';
+    public function report($id){
+        if($this->update($id, ['report' => '1'])){
+            return ['type' => 'success', 'message' => 'Le commentaire a bien été signalé'];
         } else {
-            $this->query('INSERT INTO comments SET pseudo = :pseudo, comment = :comment, parent_id = :parent_id, post_id = :post_id, depth = :depth', 
-                [
-                'pseudo' =>  strip_tags($_POST['pseudo']),
-                'comment' =>  strip_tags($_POST['content']),
-                'parent_id' => $parent_id,
-                'post_id' => $_POST['post_id'],
-                'depth' => $depth]);
-            $message = 'Merci pour votre commentaire :)';
+            return ['type' => 'warning', 'message' => 'Une erreur est survenue lors du signalement du commentaire'];
         }
-    return $message;
+        
     }
 
-    public function update(int $id, array $datas){
-        $set = "";
-        $attributes = [
-            'id' => $id,
-        ];
-        foreach ($datas as $key => $value) {
-            $set .= "$key=:$key,";
-            $attributes[$key] = $value;
-        }
-        $set = substr($set, 0, (strlen($set)-1));
-        $statement = "UPDATE ".$this->table." SET ".$set." WHERE id = :id
-        ";
-        return $this->db->prepare($statement, $attributes);
+    public function getReportedComments(){
+        $items  = $this->query("
+            SELECT *
+            FROM ".$this->table."
+            WHERE report='1'
+            ", null, true);
+        return $items;
     }
 
-
+    
 }

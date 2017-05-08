@@ -21,9 +21,9 @@
 			</thead>
 			<tbody>
 				<?php 
-				foreach ($lastArticles as $article) {
-					$id = $article->id;
-					$titre = $article->titre;
+				foreach ($lastPosts as $post) {
+					$id = $post->id;
+					$title = $post->title;
 					$actions = "
 					<a class='btn btn-primary ' href='?page=article.edit&id=$id'>Editer
 					</a>
@@ -35,8 +35,8 @@
 					$html = "
 					<tr>
 						<td>$id</td>
-						<td>$article->categorie</td>
-						<td>$titre</td>
+						<td>$post->category</td>
+						<td>$title</td>
 						<td><div class='text-center'>$actions</div></td>
 					</tr>";
 					echo $html;
@@ -104,8 +104,8 @@
 		<form>
 			<select class="form-control">
 				<?php 
-				foreach($articles as $article){
-					$html = '<option data-article-id="article_id_'.$article->id.'" class="article_selector" >'.$article->titre.' - article N° '.$article->id.'</option>';
+				foreach($posts as $post){
+					$html = '<option data-article-id="article_id_'.$post->id.'" class="article_selector" >'.$post->title.' - article N° '.$post->id.'</option>';
 					echo $html;
 				}
 				?>
@@ -122,9 +122,9 @@
 			</thead>
 			<tbody>
 				<?php 
-				foreach ($lastArticles as $article) {
-					$id = $article->id;
-					$titre = $article->titre;
+				foreach ($lastPosts as $post) {
+					$id = $post->id;
+					$title = $post->title;
 					$actions = "
 					<a class='btn btn-primary ' href='?page=article.edit&id=$id'>Editer
 					</a>
@@ -134,10 +134,10 @@
 					</form>
 					";
 					$html = "
-					<tr class='admin-articles' id='article_id_".$article->id."'>
+					<tr class='admin-articles' id='article_id_".$post->id."'>
 						<td>$id</td>
-						<td>$article->categorie</td>
-						<td>$titre</td>
+						<td>$post->category</td>
+						<td>$title</td>
 						<td><div class='text-center'>$actions</div></td>
 					</tr>";
 					echo $html;
@@ -152,8 +152,8 @@
 
 
 
-<a class="btn btn-success" href="?page=article.create">Ajouter un article</a>
-</div> <!-- div.col-sm-12 -->
+		<a class="btn btn-success" href="?page=article.create">Ajouter un article</a>
+	</div> <!-- div.col-sm-12 -->
 </div> <!-- div.row -->
 <div class="row">
 	<div class="col-sm-12">
@@ -173,7 +173,7 @@
 				<?php 
 				foreach ($categories as $category) {
 					$id = $category->id;
-					$category = $category->categorie;
+					$category = $category->title;
 					$actions = "
 					<a class='btn btn-primary' href='?page=category.edit&id=$id'>Editer
 					</a>
@@ -199,7 +199,57 @@
 
 <div class="row">
 	<div class="col-sm-12">
-		<h2>Administrer les commentaires par articles</h2>
+		<h2>Administrer les commentaires</h2>
+		<hr />
+
+		<h3>Les commentaires signalés</h2>
+
+			<table class="table table-hover table-bordered">
+				<thead>
+					<tr>
+						<td>ID</td>
+						<td>Auteur</td>
+						<td style="width:50%;">Contenu</td>
+						<td style="width:30%;">Actions</td>
+					</tr>
+				</thead>
+				<tbody>
+
+					<?php 
+					foreach ($reportedComments as $reportedComment) {
+						$actions = '<div>
+						<a class="btn btn-primary btn-sm" href="?page=comment.edit&id='.$reportedComment->id.'">Editer
+						</a>
+						<div>
+							<form method="post" action="?page=comment.delete" style="display:inline;">
+								<input type="hidden" name="deleteComment" value="'.$reportedComment->id.'"/>
+								<input type="hidden" name="deleteMethod" value="simple"/>
+								<button class="btn btn-sm btn-warning suppressionCommentaire">Supprimer</button>
+							</form>
+						</div>
+						<div>
+							<form method="post" action="?page=comment.delete" style="display:inline;">
+								<input type="hidden" name="deleteComment" value="'.$reportedComment->id.'"/>
+								<input type="hidden" name="deleteMethod" value="cascade"/>
+								<button class="btn btn-sm btn-danger suppressionCommentaire">Supprimer en cascade</button>
+							</form>
+						</div>
+					</div>';
+					$id = $reportedComment->id;
+					$auteur = $reportedComment->pseudo;
+					$contenu = $reportedComment->comment;
+					$html = '<tr>
+					<td>'.$id.'</td>
+					<td>'.$auteur.'</td>
+					<td>'.$contenu.'</td>
+					<td><div class="">'.$actions.'</div></td>';
+					echo $html;
+				}
+				?>
+
+			</tbody>
+		</table>
+
 		<hr />
 
 		<h3>Tous les commentaires</h2>

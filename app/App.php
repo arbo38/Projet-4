@@ -4,7 +4,7 @@
 use \Core\Config;
 
 /* Class générique de l'applicatation. Singleton.
-La Class App permet l'instanciation (sans avoir à ce soucier du namespace) des différentes tables/modèles de l'application et de la connection à la base de données.
+La Class App permet l'instanciation (sans avoir à ce soucier du namespace) des différents Model de l'application et de la connection à la base de données.
 */
 
 class App {

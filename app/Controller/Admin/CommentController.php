@@ -2,10 +2,15 @@
 
 namespace App\Controller\Admin;
 
+/**
+     * Controller gérant le rendu des pages liées à l'administration des commentaires
+*/
+
 class CommentController extends AppController{
 	public function __construct(){
 		parent::__construct();
-		$this->loadModel('article');
+		// Chargement des Model propre au controller
+		$this->loadModel('post');
 		$this->loadModel('category');
 		$this->loadModel('comment');
 	}
@@ -25,11 +30,13 @@ class CommentController extends AppController{
 			} else {
 				$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 			}
+		} else {
+			$this->notFound();
 		}
 
 		if(!empty($_GET)){
 			$commentId = (int) $_GET['id'];
-			$comment = $this->commentModel->find($commentId);
+			$comment = $this->commentModel->get($commentId);
 		} else {
 				$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 		}
@@ -45,7 +52,7 @@ class CommentController extends AppController{
 				$deleteMethod = (string) $_POST['deleteMethod'];
 				if($deleteMethod == 'simple'){
 					if($this->commentModel->delete($commentId)){
-						$message = 'success';
+						$message = ['type' => 'success', 'message' => 'Le commentaire a bien été supprimé'];
 					} else {
 						$message = ['type' => 'danger', 'message' => 'Une erreur est survenue'];
 					}

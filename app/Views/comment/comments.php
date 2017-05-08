@@ -7,9 +7,19 @@
         <h4 class="card-title"><?= $comment->pseudo; ?></h4>
         <!--Text-->
         <p class="card-text"><?= $comment->comment; ?></p>
-        <?php if($comment->depth <= 2): ?>
-        <button class="btn btn-default reply" data-id="<?= $comment->id; ?>">Répondre</button>
+
+        <?php if($comment->depth <= 1): ?>
+            <button class="btn btn-default reply" data-id="<?= $comment->id; ?>">Répondre</button>
         <?php endif; ?>
+        <form action=""  method="post">
+            <input type="hidden" name="report_comment" value="<?= $comment->id; ?>">
+            <div class="form-group">
+                <button type="submit" class="btn btn-sm btn-danger">Signaler</button>
+            </div>
+        </form>
+
+
+
     </div>
     <!--/.Card content-->
 

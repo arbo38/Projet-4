@@ -43,8 +43,8 @@
             $html = "<li class='nav-item dropdown btn-group'>
             <a class='nav-link dropdown-toggle' id='dropdownMenu1' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>Categories</a>
             <div class='dropdown-menu dropdown' aria-labelledby='dropdownMenu1'>";
-            foreach ($categories as $categorie) {
-              $html .= "<a class='dropdown-item' href='".$categorie->getURL()."'>".$categorie->categorie."</a>";
+            foreach ($categories as $category) {
+              $html .= "<a class='dropdown-item' href='".$category->getURL()."'>".$category->title."</a>";
             }
             $html .= "</div></li>";
             echo $html;

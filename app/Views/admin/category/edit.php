@@ -11,7 +11,7 @@
 	</div> <!-- div.col-sm-6 -->
 </div> <!-- div.row -->
 <form method="post" action="">
-	<?= $form->input('categorie', 'Nom de la catégorie'); ?>
+	<?= $form->input('title', 'Nom de la catégorie'); ?>
 	<?= $form->submit(); ?>
 </form>
 

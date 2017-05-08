@@ -2,11 +2,16 @@
 
 namespace App\Controller\Admin;
 
+/**
+     * Controller gérant le rendu des pages liées à l'administration des catégories
+*/
+
 class CategoryController extends AppController{
 
 	public function __construct(){
 		parent::__construct();
-		$this->loadModel('article');
+		// Chargement des Model propre au controller
+		$this->loadModel('post');
 		$this->loadModel('category');
 	}
 
@@ -14,7 +19,7 @@ class CategoryController extends AppController{
 		$form = new \Core\HTML\BootstrapForm();
 		if(!empty($_POST)){
 			$category = (string) $_POST['categorie'];
-			$new = $this->categoryModel->new(['category' => $category]);
+			$new = $this->categoryModel->add(['title' => $category]);
 			if($new){
 				$_SESSION['new'] = true;
 				header('Location: admin.php?page=category.edit&id='.$this->app->getDb()->lastInsertId());
@@ -25,17 +30,17 @@ class CategoryController extends AppController{
 
 	public function editCategory(){
 		$message = '';
-	// On regarde si l'on doit mettre à jour une categorie avec la présence de données en POST et d'un ID en get
+	// On regarde si l'on doit mettre à jour une categorie avec la présence de données en POST 'ET' d'un ID en get
 		if(!empty($_POST) && !empty($_GET)){
-			$category = (string) $_POST['categorie'];
+			$category = (string) $_POST['title'];
 			$categoryId = (int) $_GET['id'];
-			$update = $this->categoryModel->update($categoryId, ['categorie' => $category]);
+			$update = $this->categoryModel->update($categoryId, ['title' => $category]);
 			if($update){
 				$message = ['type' => 'success', 'message' => 'La catégorie a bien été mis à jour.'];
 				
 			}
 		}
-	// On regarde si l'on vient pour éditer un article avec la présence d'un id
+	// Sinon on vient pour éditer une catégorie
 		if(!empty($_GET)){ 
 			$categoryId = (int) $_GET['id'];
 			$category = $this->categoryModel->get($categoryId);

@@ -14,9 +14,9 @@
 
 
 <form method="post">
-	<?= $form->input('titre', 'Titre') ?>
-	<?= $form->input('contenu', 'Article', ['type' => 'textarea']) ?>
-	<?= $form->select('categorie_id', 'Categorie', $categories); ?>
+	<?= $form->input('title', 'Titre') ?>
+	<?= $form->input('content', 'Article', ['type' => 'textarea']) ?>
+	<?= $form->select('category_id', 'Categorie', $categories); ?>
 	<?= $form->submit() ?>
 </form>
 

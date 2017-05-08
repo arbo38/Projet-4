@@ -4,6 +4,10 @@ namespace Core\Auth;
 
 use Core\Database\Database;
 
+/**
+     * Gère l'authenfication des utilisateurs 
+*/
+
 class DBAuth{
 
 	private $db;
@@ -17,11 +21,7 @@ class DBAuth{
 			return $_SESSION['auth'];
 		}
 	}
-	/**
-	 * @param  string $username
-	 * @param  string $password
-	 * @return boolean
-	 */
+
 	public function login(string $username, string $password){
 		$user = $this->db->prepare("
 			SELECT * FROM users WHERE username = ?
@@ -31,7 +31,7 @@ class DBAuth{
 				$_SESSION['auth'] = $user->id;
 				return true;
 			}
-			return ;
+			return false;
 		} else {
 			return false;
 		}
@@ -39,5 +39,17 @@ class DBAuth{
 
 	public function logged(){
 		return isset($_SESSION['auth']);
+	}
+
+	public function admin(){
+		if(isset($_SESSION['auth'])){
+			$user = $this->db->prepare("
+			SELECT status FROM users WHERE id = ?
+			", [$_SESSION['auth']], null, true);
+			if($user->status == 'admin'){
+				return true;
+			}
+			return false;
+		}
 	}
 }

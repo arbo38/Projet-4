@@ -2,6 +2,11 @@
 
 namespace Core;
 
+/**
+     * Class permettant la lecture de la configuration a partir d'un fichier passé en paramètre.
+     * Elle est invoqué dans la class App lié à l'application.
+*/
+
 class Config {
 
 	private $settings = [];
