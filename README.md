@@ -24,7 +24,7 @@ Si c'est votre souhait, téléchargez l'application depuis github. Il ne vous ma
 ```php
 <?php
 
-namespace App\Config;
+namespace \Config;
 
 return array(
 		'db_user' => 'user',
