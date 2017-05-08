@@ -6,7 +6,7 @@ L'objectif de ce projet est de créer un blog (ou CRUD), en PHP-MySQL sans frame
 
 ## Comment ça marche ?
 
-A la racine se trouvent 3 dossier : _app_, _core_ et public.
+A la racine se trouvent 3 dossier : _app_, _core_ et _public_.
 
 Dans le dossier _core_ se trouvent les logiques génériques qui ne sont pas propres à l'application et qui peuvent être facilement réutilisées dans d'autres projet.
 
